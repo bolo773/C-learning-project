@@ -87,7 +87,7 @@ int Y;
 
 main (){
 
-printf(" Warning this program contains content innapropriate for audiences of all ages. Please avoid \n" );
+printf(" Warning this program is unfinished and is not,  at the current state, a game at all \n" );
 
 charc();
 }
@@ -206,7 +206,7 @@ printf("shooting: %d \n", shooting);
 
 
 
-
+plot();
 
 
 
@@ -221,11 +221,32 @@ printf("shooting: %d \n", shooting);
 plot(){
 
 C_HP = HP;
+X=0;
+Y=0;
+
+int a;
 
 while(C_HP>0){
 
+a = 0;
+
+printf("Health: %d / %d \n ",C_HP,HP);
+
+printf("What to do?: (1)go (2)rest (3)scavange \n");
+
+scanf("%d",&a);
+
+switch(a){
+case 1:
+	move();
+	break;
+
+default:
+	break;
 
 
+
+}
 
 
 
@@ -233,6 +254,39 @@ while(C_HP>0){
 
 
 }
+
+//this is the movement function for the main charecter
+
+move(){
+
+int a;
+printf("move where? \n ");
+printf("(1)up (2)down (3)left (4)right \n");
+scanf("%d",&a);
+
+switch (a){
+case 1:
+	X++;
+	break;
+case 2:
+	X--;
+	break;
+case 3:
+	Y--;
+	break;
+case 4:
+	Y++;
+	break;
+default:
+	break;
+
+}
+
+printf("position %d,%d",X,Y);
+
+}
+
+
 
 
 //this function initializes the landscape and impassible objects
