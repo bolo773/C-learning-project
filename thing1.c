@@ -1,6 +1,6 @@
 
 #include "stdio.h"
-
+#include "stdlib.h"
 
 
 
@@ -85,9 +85,15 @@ int Y;
 
 
 
+
+
+
+
+
+
 main (){
 
-printf(" Warning this program is unfinished and is not,  at the current state, a game at all \n" );
+printf(" Warning this program contains content innapropriate for audiences of all ages. Please avoid \n" );
 
 charc();
 }
@@ -282,7 +288,8 @@ default:
 
 }
 
-printf("position %d,%d",X,Y);
+printf("position %d,%d \n ",X,Y);
+encounter();
 
 }
 
@@ -292,3 +299,46 @@ printf("position %d,%d",X,Y);
 //this function initializes the landscape and impassible objects
 
 landscape(){}
+
+
+//this function rolls for random encounter
+
+encounter(){
+
+int roll = (rand()%5)+1;
+
+switch(roll){
+
+case 1:
+	printf("encounter 1 will be combat \n ");
+	break;
+case 2:
+	printf("encounter 2 will be an obstacle or trap \n ");
+	break;
+
+case 3:
+	printf("encounter 3 will be some sort fo low grade loot \n ");
+	break;
+case 4: 
+	printf("encounter 4 willl be some sort of useful loot like food or bandages \n ");
+	break;
+case 5:
+	printf("encounter 5 will be some larger amount of 4's loot \n ");
+	break;
+case 6: 
+	printf("encounter 6 will be a new weapon or high grade loot \n");
+
+default:
+	printf("something has gone wrong");
+	break;
+
+
+
+}
+
+
+
+
+
+
+}
