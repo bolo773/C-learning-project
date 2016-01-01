@@ -2,6 +2,45 @@
 #include "stdio.h"
 #include "stdlib.h"
 
+//charecter inventory
+
+
+
+struct enemy {
+
+int health;
+
+int damage;
+
+};
+
+
+
+
+
+
+
+
+
+
+struct inventory  {
+
+int bandages;
+
+int knives;
+
+int handguns;
+
+int shotguns;
+
+int rifles;
+
+int bombs;
+
+};
+
+struct inventory player_inv;
+
 
 
 // charecter stats 
@@ -224,7 +263,7 @@ plot();
 //it will print out important information for the player nice and neat
 //secondly it will provide a place where the player will make the majority of the choices
 
-plot(){
+int plot(){
 
 C_HP = HP;
 X=0;
@@ -238,7 +277,7 @@ a = 0;
 
 printf("Health: %d / %d \n ",C_HP,HP);
 
-printf("What to do?: (1)go (2)rest (3)scavange \n");
+printf("What to do?: (1)go (2)list inventory (3)scavange (4) quit game \n");
 
 scanf("%d",&a);
 
@@ -246,7 +285,12 @@ switch(a){
 case 1:
 	move();
 	break;
-
+case 2: 
+	printf("bandages:%d \n ", player_inv.bandages);
+	break;
+case 4:
+	return 1;
+	
 default:
 	break;
 
@@ -318,6 +362,8 @@ case 2:
 
 case 3:
 	printf("encounter 3 will be some sort fo low grade loot \n ");
+	player_inv.bandages++;
+	printf("you got a bandage! \n ");
 	break;
 case 4: 
 	printf("encounter 4 willl be some sort of useful loot like food or bandages \n ");
