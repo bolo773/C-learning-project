@@ -17,7 +17,17 @@ int damage;
 
 
 
+struct weapon{
 
+int range;
+
+int damage;
+
+int accuracy;
+
+int ammo_cap;
+
+};
 
 
 // inventory
@@ -37,6 +47,13 @@ int rifles;
 
 int bombs;
 
+int shotgun_shells;
+
+int pistol_ammo;
+
+int rifle_ammo;
+
+
 };
 
 struct inventory player_inv;
@@ -44,6 +61,7 @@ struct inventory player_inv;
 
 
 
+//struct for all living things
 
 struct entity {
 
@@ -127,20 +145,44 @@ int xp_to_next;
 int X;
 int Y;
 
+
+
+
+
+//weapon values
+
+
+
+
+int weapon_damage;
+
+int weapon_accuracy;
+
+int weapon_range;
+
+
 };
+
+
+struct area {
+
+int impassible_x[50];
+int impassible_y[50];
+
+
+};
+
+struct area world;
+
 
 struct entity player;
 
 
-
-
-
-
-
-
-
+//main starting point
 
 main (){
+
+landscape();
 
 initscr();
 
@@ -165,7 +207,7 @@ charc(){
 
 
 printw("welcome to the charecter creation tool \n");
-printw("\n \n \n \n \n \n");
+
 
 
 player.vitality = 20;
@@ -342,7 +384,7 @@ shift(){
 
 int a;
 printw("move where? \n ");
-printw("(1)up (2)down (3)left (4)right \n");
+printw("(1)right  (2)left  (3)down  (4)up  \n");
 
 refresh();
 scanf("%d",&a);
@@ -350,15 +392,31 @@ clear();
 
 switch (a){
 case 1:
+	if(world.impassible_x[player.X+1] == true){
+	printw("cannot go there somthing in the way \n");
+	break;}
+
 	player.X++;
 	break;
 case 2:
+	if(world.impassible_x[player.X-1]== true){
+	printw("cannot go there something in the way \n ");
+	break;}
+	
 	player.X--;
 	break;
 case 3:
+	if(world.impassible_y[player.Y-1]== true){
+	printw("cannot go there something in the way \n");
+	break;}
+
 	player.Y--;
 	break;
 case 4:
+	if(world.impassible_y[player.Y+1]== true){
+	printw("cannot go there something in the way \n");
+	break;}
+	
 	player.Y++;
 	break;
 default:
@@ -376,7 +434,13 @@ encounter();
 
 //this function initializes the landscape and impassible objects
 
-landscape(){}
+landscape(){
+
+world.impassible_y[2]= 1;
+
+
+
+}
 
 
 //this function rolls for random encounter
@@ -512,7 +576,10 @@ if (enemy1.health  <= 0 ) return;
 
 player.C_HP = player.C_HP - (rand() % enemy1.damage +1 );
 
-printw("player.HP : %d", player.C_HP );
+if (player.C_HP <= 0 ) death();
+
+
+printw(" Health  : %d", player.C_HP );
 
 
 
@@ -524,7 +591,7 @@ printw("player.HP : %d", player.C_HP );
 }
 
 
-
+death(){printw("you died");}
 
 levelup(){
 
