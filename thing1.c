@@ -15,8 +15,6 @@ int damage;
 };
 
 
-
-
 struct weapon{
 
 int range;
@@ -164,15 +162,60 @@ int weapon_range;
 };
 
 
-struct area {
 
-int impassible_x[50];
-int impassible_y[50];
+struct mass {
 
+int X;
+
+int Y;
+
+char name[20];
+
+char description[100];
+
+int impassible;
+
+} object[100];
+
+
+
+
+//used to generate large structure
+
+
+struct proto_struct{
+
+int X;
+
+int Y;
+
+int Nside[2];
+int Eside[2];
+int Sside[2];
+int Wside[2];
+
+char name[20];
+
+char description[100];
 
 };
 
-struct area world;
+
+
+
+//this function initializes the landscape and impassible objects
+
+landscape(){
+	
+object[0].X=1;
+object[0].Y=2;
+
+
+
+
+}
+
+
 
 
 struct entity player;
@@ -182,9 +225,20 @@ struct entity player;
 
 main (){
 
+int a;
+
+
 landscape();
 
 initscr();
+
+
+
+printw("what would you like to do? (1)game (2)dev_godmode \n");
+
+scanf("%d",&a);
+
+if(a == 1){
 
 printw(" warning game is very incomplete \n" );
 
@@ -195,6 +249,18 @@ clear();
 
 
 charc();
+
+}
+
+else {
+
+
+printw("dev_godmode enabled \n");
+
+}
+
+
+
 }
 
 
@@ -329,6 +395,31 @@ plot();
 }
 
 
+//this will list the inventory
+
+list_Pinv(){
+
+clear();
+
+
+if(player_inv.bandages) printw("bandages:%d \n",player_inv.bandages);
+if(player_inv.knives) printw("knives:%d \n",player_inv.knives);
+if( player_inv.handguns) printw("handgun:%d \n",player_inv.handguns);
+if(player_inv.shotguns) printw("shotgun:%d \n",player_inv.shotguns);
+if(player_inv.rifles) printw("rifle:%d \n",player_inv.rifles);
+if(player_inv.bombs) printw("bombs:%d \n",player_inv.bombs);
+if(player_inv.shotgun_shells) printw("sotgun_shells:%d \n ", player_inv.shotgun_shells);
+if(player_inv.pistol_ammo) printw("pistol_ammo:%d",player_inv.pistol_ammo);
+if(player_inv.rifle_ammo) printw("rifle_ammo:%d \n",player_inv.rifle_ammo);
+
+refresh();
+
+printw("press any key to continue");
+getch();
+
+return;
+}
+
 // this function will do a few thiings:
 //it will print out important information for the player nice and neat
 //secondly it will provide a place where the player will make the majority of the choices
@@ -358,8 +449,12 @@ case 1:
 	shift();
 	break;
 case 2: 
-	printw("bandages:%d \n ", player_inv.bandages);
+	list_Pinv();
 	break;
+
+case 3:
+	
+
 case 4:
 	endwin();
 	return 1;
@@ -383,6 +478,8 @@ default:
 shift(){
 
 int a;
+int i;
+
 printw("move where? \n ");
 printw("(1)right  (2)left  (3)down  (4)up  \n");
 
@@ -392,32 +489,39 @@ clear();
 
 switch (a){
 case 1:
-	if(world.impassible_x[player.X+1] == true){
-	printw("cannot go there somthing in the way \n");
-	break;}
+	for(i=0; i<101; i++){
+	if(((object[i].X) == player.X+1) && (object[i].Y== player.Y)){
+		printw("cant go there something in way");
+		break;}
+		}
+	
 
-	player.X++;
+	if (i==101) player.X++;
 	break;
 case 2:
-	if(world.impassible_x[player.X-1]== true){
-	printw("cannot go there something in the way \n ");
-	break;}
-	
-	player.X--;
+	for(i=0; i<101; i++){
+	if(((object[i].X) == player.X-1) && (object[i].Y== player.Y)){
+		printw("cant go there something in way");
+		break;}
+		}
+	if (i==101 )player.X--;
 	break;
 case 3:
-	if(world.impassible_y[player.Y-1]== true){
-	printw("cannot go there something in the way \n");
-	break;}
+	for(i=0; i<101; i++){
+	if(((object[i].X) == player.X) && (object[i].Y == player.Y-1)){
+		printw("cant go there something in way");
+		break;}
+		}
 
-	player.Y--;
+	if(i==101) player.Y--;
 	break;
 case 4:
-	if(world.impassible_y[player.Y+1]== true){
-	printw("cannot go there something in the way \n");
-	break;}
-	
-	player.Y++;
+	for(i=0; i<101; i++){
+	if(((object[i].X) == player.X) && (object[i].Y== player.Y+1)){
+		printw("cant go there something in way");
+		break;}
+		}
+	if(i == 101) player.Y++;
 	break;
 default:
 	break;
@@ -429,18 +533,6 @@ encounter();
 
 }
 
-
-
-
-//this function initializes the landscape and impassible objects
-
-landscape(){
-
-world.impassible_y[2]= 1;
-
-
-
-}
 
 
 //this function rolls for random encounter
@@ -553,7 +645,7 @@ switch(a){
 
 case 1:
 	enemy1.health = enemy1.health - ((player.fighting/2) + (rand() % (player.fighting/2)+1));
-	printw("enemy hp: %d", enemy1.health);
+	printw("enemy HP: %d \n", enemy1.health);
 	break;
 case 2:
 	printw("you attempt to run.... \n " );
@@ -579,7 +671,7 @@ player.C_HP = player.C_HP - (rand() % enemy1.damage +1 );
 if (player.C_HP <= 0 ) death();
 
 
-printw(" Health  : %d", player.C_HP );
+printw(" HP: %d \n", player.C_HP );
 
 
 
