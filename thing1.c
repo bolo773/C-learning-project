@@ -1,30 +1,14 @@
 #include "ncurses.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include "itemval.h"
+
+
+
+
+
 
 //enemy
-
-
-struct tools{
-
-char name[20];
-
-int type;
-
-int callnum;
-
-int value;
-
-int mod;
-
-int heal;
-
-int weapon;
-
-
-
-} item[50];
-
 
 struct enemy {
 
@@ -55,24 +39,6 @@ struct inventory  {
 
 
 int amount[50];
-
-int bandages;
-
-int knives;
-
-int handguns;
-
-int shotguns;
-
-int rifles;
-
-int bombs;
-
-int shotgun_shells;
-
-int pistol_ammo;
-
-int rifle_ammo;
 
 
 };
@@ -234,13 +200,12 @@ char description[100];
 // gives items their values
 
 
-itemload(){
-
-item[0].type = 1;
-item[0].mod = 5;
 
 
-}
+
+
+
+
 
 
 
@@ -514,7 +479,7 @@ printw("bandages:%d \n",player_inv.amount[0]);
 	item[6].callnum = e;
 }
 	if(player_inv.amount[7]){
-	printw("pistol_ammo:%d",player_inv.amount[7]);
+	printw("pistol_ammo:%d \n",player_inv.amount[7]);
 	
 	e++;
 
@@ -591,6 +556,20 @@ int i;
 	printw("used ammo \n");
 	break;
 	
+	case 3:
+
+	player.weapon_damage = item[itemnum].damage;
+
+ 	player.weapon_accuracy = item[itemnum].accuracy;
+
+ 	player.weapon_range = item[itemnum].range; 
+
+	player.C_ammo = item[itemnum].ammocap;
+
+	player.C_weapon = itemnum;
+	
+	break;
+
 	default :
 	break;
 	}
@@ -771,27 +750,27 @@ int a = (rand()%6 +1);
 switch(a){
 
 case 1:
-	player_inv.bandages++;
+	player_inv.amount[0]++;
 	printw("you found some bandages \n ");
 	break;
 case 2: 
-	player_inv.pistol_ammo = player_inv.pistol_ammo + (rand()%20 + 1);
+	player_inv.amount[7] = player_inv.amount[7] + (rand()%20 + 1);
 	printw("you found some pistol ammo \n ");
 	break;
 case 3: 
-	player_inv.rifle_ammo = player_inv.rifle_ammo + (rand()%20 + 1);
+	player_inv.amount[8] = player_inv.amount[8] + (rand()%20 + 1);
 	printw("you found some rifle ammo \n");
 	break;
 case 4:
-	player_inv.shotgun_shells = player_inv.shotgun_shells + (rand()%20 + 1);
+	player_inv.amount[6] = player_inv.amount[6] + (rand()%20 + 1);
 	printw("you found some shotgun shells \n");
 	break;
 case 5: 
-	player_inv.knives++;
+	player_inv.amount[1]++;
 	printw("you found a knife \n");
 	break;
 case 6:	
-	player_inv.bombs++;
+	player_inv.amount[5]++;
 	printw("you found a bomb \n ");
 	break;
 
