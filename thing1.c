@@ -5,6 +5,26 @@
 //enemy
 
 
+struct tools{
+
+char name[20];
+
+int type;
+
+int callnum;
+
+int value;
+
+int mod;
+
+int heal;
+
+int weapon;
+
+
+
+} item[50];
+
 
 struct enemy {
 
@@ -32,6 +52,9 @@ int ammo_cap;
 
 
 struct inventory  {
+
+
+int amount[50];
 
 int bandages;
 
@@ -158,6 +181,9 @@ int weapon_accuracy;
 
 int weapon_range;
 
+int C_ammo;
+
+int C_weapon;
 
 };
 
@@ -203,6 +229,26 @@ char description[100];
 
 
 
+
+
+// gives items their values
+
+
+itemload(){
+
+item[0].type = 1;
+item[0].mod = 5;
+
+
+}
+
+
+
+
+
+
+
+
 //this function initializes the landscape and impassible objects
 
 landscape(){
@@ -225,6 +271,8 @@ struct entity player;
 
 main (){
 
+itemload();
+
 int a;
 
 
@@ -232,9 +280,11 @@ landscape();
 
 initscr();
 
-
+player_inv.amount[0] = 1;
 
 printw("what would you like to do? (1)game (2)dev_godmode \n");
+
+refresh();
 
 scanf("%d",&a);
 
@@ -395,30 +445,165 @@ plot();
 }
 
 
+
+
+
 //this will list the inventory
 
 list_Pinv(){
 
+int e = 0;
+int a;
+int i;
+
 clear();
 
 
-if(player_inv.bandages) printw("bandages:%d \n",player_inv.bandages);
-if(player_inv.knives) printw("knives:%d \n",player_inv.knives);
-if( player_inv.handguns) printw("handgun:%d \n",player_inv.handguns);
-if(player_inv.shotguns) printw("shotgun:%d \n",player_inv.shotguns);
-if(player_inv.rifles) printw("rifle:%d \n",player_inv.rifles);
-if(player_inv.bombs) printw("bombs:%d \n",player_inv.bombs);
-if(player_inv.shotgun_shells) printw("sotgun_shells:%d \n ", player_inv.shotgun_shells);
-if(player_inv.pistol_ammo) printw("pistol_ammo:%d",player_inv.pistol_ammo);
-if(player_inv.rifle_ammo) printw("rifle_ammo:%d \n",player_inv.rifle_ammo);
+	if(player_inv.amount[0]) {
+
+
+printw("bandages:%d \n",player_inv.amount[0]);
+
+	e++;
+
+	item[0].callnum = e;
+}
+
+
+	if(player_inv.amount[1]){
+	 printw("knives:%d \n",player_inv.amount[1]);
+	
+	e++;
+
+	item[1].callnum = e;
+}
+	if( player_inv.amount[2]){
+	 printw("handgun:%d \n",player_inv.amount[2]);
+	
+	e++;
+
+	item[2].callnum = e;
+}
+	if(player_inv.amount[3]){
+	 printw("shotgun:%d \n",player_inv.amount[3]);
+	
+	e++;
+
+	item[3].callnum = e;
+}
+	if(player_inv.amount[4]) {
+	printw("rifle:%d \n",player_inv.amount[4]);
+	
+	e++;
+
+	item[4].callnum = e;
+}
+	
+	if(player_inv.amount[5]){
+	 printw("bombs:%d \n",player_inv.amount[5]);
+	
+	e++;
+
+	item[5].callnum = e;
+}
+	if(player_inv.amount[6]){
+	 printw("shotgun_shells:%d \n ", player_inv.amount[6]);
+	
+	e++;
+
+	item[6].callnum = e;
+}
+	if(player_inv.amount[7]){
+	printw("pistol_ammo:%d",player_inv.amount[7]);
+	
+	e++;
+
+	item[7].callnum = e;
+}
+	if(player_inv.amount[8]){ 
+	printw("rifle_ammo:%d \n",player_inv.amount[8]);
+
+
+	e++;
+
+	item[8].callnum = e;
+}
+
+
+
+printw("what would you like to do? \n");
+printw(" (1) use  (2) nothing \n ");
 
 refresh();
+scanf("%d",&a);
 
+if (a == 1){
+
+
+printw("what item? \n ");
+
+refresh();
+scanf("%d",&a);
+
+	for(i=0; i < 51; ){
+		if( item[i].callnum == a) {
+			printw("found item \n");
+			use(i);
+			
+		
+		}
+
+i++;
+
+
+}
+
+}
 printw("press any key to continue");
 getch();
 
 return;
 }
+
+
+//this function is used to use items
+//sssssssssssssss
+//ssssssssssssss
+use(int itemnum ){
+
+
+int i;
+	switch(item[itemnum].type){
+	case 1:
+	player.C_HP = player.C_HP + item[itemnum].mod;
+	player_inv.amount[itemnum]--;
+	printw("used item actually \n");
+	break;
+
+
+	case 2:
+	for(i=player_inv.amount[itemnum]; i > 0; i--){
+		if(item[itemnum].weapon == player.C_weapon) {
+				player.C_ammo++;
+				player_inv.amount[itemnum]--;
+			}
+		}
+	printw("used ammo \n");
+	break;
+	
+	default :
+	break;
+	}
+
+	
+
+
+
+
+}
+
+
+
 
 // this function will do a few thiings:
 //it will print out important information for the player nice and neat
@@ -438,7 +623,7 @@ a = 0;
 
 printw("Health: %d / %d \n ",player.C_HP,player.HP);
 
-printw("What to do?: (1)go (2)list inventory (3)scavange (4) quit game \n");
+printw("What to do?: (1)go (2)open inventory (3)scavange (4) quit game \n");
 
 refresh();
 scanf("%d",&a);
@@ -553,8 +738,7 @@ case 2:
 
 case 3:
 	printw("encounter 3 will be some sort fo low grade loot \n ");
-	player_inv.bandages++;
-	printw("you got a bandage! \n ");
+	looting();
 	break;
 case 4: 
 	printw("encounter 4 willl be some sort of useful loot like food or bandages \n ");
@@ -588,28 +772,37 @@ switch(a){
 
 case 1:
 	player_inv.bandages++;
-
+	printw("you found some bandages \n ");
+	break;
 case 2: 
-	
+	player_inv.pistol_ammo = player_inv.pistol_ammo + (rand()%20 + 1);
+	printw("you found some pistol ammo \n ");
+	break;
+case 3: 
+	player_inv.rifle_ammo = player_inv.rifle_ammo + (rand()%20 + 1);
+	printw("you found some rifle ammo \n");
+	break;
+case 4:
+	player_inv.shotgun_shells = player_inv.shotgun_shells + (rand()%20 + 1);
+	printw("you found some shotgun shells \n");
+	break;
+case 5: 
+	player_inv.knives++;
+	printw("you found a knife \n");
+	break;
+case 6:	
+	player_inv.bombs++;
+	printw("you found a bomb \n ");
+	break;
+
 
 default:
 	break;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
+printw("press any key to continue \n ");
+getch();
 
 
 }
