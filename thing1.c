@@ -197,17 +197,6 @@ char description[100];
 
 
 
-// gives items their values
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -246,6 +235,8 @@ landscape();
 initscr();
 
 player_inv.amount[0] = 1;
+player_inv.amount[2] = 1;
+player_inv.amount[3] = 40;
 
 printw("what would you like to do? (1)game (2)dev_godmode \n");
 
@@ -412,6 +403,27 @@ plot();
 
 
 
+//lists player stats
+
+liststats(){
+
+printw("small electronics: %d \n",player.small_electronics);
+printw("computers: %d \n", player.computers);
+printw("mechanics: %d \n",player.mechanics);
+printw("locksmithing: %d \n",player.locksmith);
+printw("chemistry: %d \n",player.chemistry);
+printw("fighting: %d \n",player.fighting);
+printw("shooting: %d \n",player.shooting);
+
+
+printw("weapon damage: %d \n",player.weapon_damage);
+printw("weapon range: %d \n",player.weapon_range);
+printw("weapon accurracy: %d \n", player.weapon_range);
+
+printw("ammo in gun:%d",player.C_ammo);
+}
+
+
 
 //this will list the inventory
 
@@ -420,79 +432,22 @@ list_Pinv(){
 int e = 0;
 int a;
 int i;
+int b;
 
 clear();
 
 
-	if(player_inv.amount[0]) {
+for(b = 0; b<51;b++)
+	if(player_inv.amount[b]) {
 
 
-printw("bandages:%d \n",player_inv.amount[0]);
-
-	e++;
-
-	item[0].callnum = e;
-}
-
-
-	if(player_inv.amount[1]){
-	 printw("knives:%d \n",player_inv.amount[1]);
-	
-	e++;
-
-	item[1].callnum = e;
-}
-	if( player_inv.amount[2]){
-	 printw("handgun:%d \n",player_inv.amount[2]);
-	
-	e++;
-
-	item[2].callnum = e;
-}
-	if(player_inv.amount[3]){
-	 printw("shotgun:%d \n",player_inv.amount[3]);
-	
-	e++;
-
-	item[3].callnum = e;
-}
-	if(player_inv.amount[4]) {
-	printw("rifle:%d \n",player_inv.amount[4]);
-	
-	e++;
-
-	item[4].callnum = e;
-}
-	
-	if(player_inv.amount[5]){
-	 printw("bombs:%d \n",player_inv.amount[5]);
-	
-	e++;
-
-	item[5].callnum = e;
-}
-	if(player_inv.amount[6]){
-	 printw("shotgun_shells:%d \n ", player_inv.amount[6]);
-	
-	e++;
-
-	item[6].callnum = e;
-}
-	if(player_inv.amount[7]){
-	printw("pistol_ammo:%d \n",player_inv.amount[7]);
-	
-	e++;
-
-	item[7].callnum = e;
-}
-	if(player_inv.amount[8]){ 
-	printw("rifle_ammo:%d \n",player_inv.amount[8]);
-
+printw("%s:%d \n",item[b].name,player_inv.amount[b]);
 
 	e++;
 
-	item[8].callnum = e;
+	item[b].callnum = e;
 }
+
 
 
 
@@ -547,7 +502,7 @@ int i;
 
 
 	case 2:
-	for(i=player_inv.amount[itemnum]; i > 0; i--){
+	for(i=player_inv.amount[itemnum]; (i > 0) && ((player.C_ammo -1) < item[itemnum].ammocap); i--){
 		if(item[itemnum].weapon == player.C_weapon) {
 				player.C_ammo++;
 				player_inv.amount[itemnum]--;
@@ -602,7 +557,7 @@ a = 0;
 
 printw("Health: %d / %d \n ",player.C_HP,player.HP);
 
-printw("What to do?: (1)go (2)open inventory (3)scavange (4) quit game \n");
+printw("What to do?: (1)go (2)open inventory (3)scavange (4) quit game (5) list stats \n");
 
 refresh();
 scanf("%d",&a);
@@ -623,6 +578,9 @@ case 4:
 	endwin();
 	return 1;
 	
+case 5:
+	liststats();
+	break;
 default:
 	break;
 
@@ -742,7 +700,7 @@ refresh();
 
 
 
-
+//split this function into 2 parts
 looting(){
 
 int a = (rand()%6 +1);
