@@ -1,4 +1,7 @@
 #include "string.h"
+#include "stdio.h"
+
+
 
 
 struct tools{
@@ -31,7 +34,7 @@ int accuracy;
 
 
 
-
+FILE *data;
 
 
 
@@ -39,6 +42,40 @@ int accuracy;
 itemload(){
 
 //bandaids
+
+
+
+
+
+data = fopen("itemlist.list", "r");
+
+char  name[20];
+int type;
+int mod;
+int damage;
+int range;
+int accuracy;
+int ammocap;
+int weapon;
+int number;
+
+while(fscanf(data,"%s %d %d %d %d %d %d %d %d",name,&type,&mod,&damage,&range,&accuracy,&ammocap,&weapon,&number)!= EOF){
+	strcpy(item[number].name, name);
+	item[number].type = type;
+	item[number].mod = mod;
+	item[number].damage = damage;
+	item[number].range = range;
+	item[number].accuracy = accuracy;
+	item[number].ammocap = ammocap;
+	item[number].weapon = weapon;
+
+}
+
+fclose(data);
+}
+
+
+itemloadold(){
 
 strcpy(item[0].name,"bandages");
 
@@ -79,8 +116,6 @@ item[2].ammocap = 10;
 item[3].type = 2;
 
 item[3].weapon = 2;
-
-
 
 
 }
