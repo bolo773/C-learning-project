@@ -1,0 +1,11 @@
+-handle switching weapons and what to do with the ammo
+-improve combat
+-make it so map information is stored on .map files
+-improve user input system
+-add area descriptions
+-make is so main source file is shorter and cleaner by exporting 
+ definitions to header files.
+-clean up output
+*extra* make output more pretty 
+
+

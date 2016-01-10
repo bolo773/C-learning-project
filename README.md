@@ -6,8 +6,5 @@ personal learning experiment. If you are experienced with C and care enough to g
 
 progress:
 
-i have rewrote a lot of the code to make it more flexible in the last 
-week. movement seems to be working and the inventory system is now 
-functional. Next will be setting the values for all the items and 
-migrating most of structures and stuff to header files to keep things 
-more organized.
+Loading firearms is now possible but now im going to have to figure out how to handle swapping weapons and what to do with that ammo inside the gun.
+Im also going to have to fix some of the glaring bugs in order to make things more presentable.

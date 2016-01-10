@@ -151,6 +151,8 @@ int C_ammo;
 
 int C_weapon;
 
+int C_ammocap;
+
 };
 
 
@@ -416,6 +418,8 @@ printw("fighting: %d \n",player.fighting);
 printw("shooting: %d \n",player.shooting);
 
 
+printw("current weapon %d",player.C_weapon);
+
 printw("weapon damage: %d \n",player.weapon_damage);
 printw("weapon range: %d \n",player.weapon_range);
 printw("weapon accurracy: %d \n", player.weapon_range);
@@ -495,23 +499,29 @@ use(int itemnum ){
 int i;
 	switch(item[itemnum].type){
 	case 1:
+	if (player_inv.amount[itemnum] > 0){
 	player.C_HP = player.C_HP + item[itemnum].mod;
 	player_inv.amount[itemnum]--;
 	printw("used item actually \n");
+	}
 	break;
 
 
 	case 2:
-	for(i=player_inv.amount[itemnum]; (i > 0) && ((player.C_ammo -1) < item[itemnum].ammocap); i--){
-		if(item[itemnum].weapon == player.C_weapon) {
-				player.C_ammo++;
+		if(item[itemnum].weapon == player.C_weapon && player_inv.amount[itemnum]) {
+				printw("ammo match \n");
+				while(player.C_ammo != player.C_ammocap){
 				player_inv.amount[itemnum]--;
+				player.C_ammo ++;
+			printw("used ammo");				
 			}
 		}
-	printw("used ammo \n");
+
 	break;
 	
 	case 3:
+
+	if (player_inv.amount[itemnum]>0 && player.C_weapon != itemnum){
 
 	player.weapon_damage = item[itemnum].damage;
 
@@ -519,10 +529,12 @@ int i;
 
  	player.weapon_range = item[itemnum].range; 
 
-	player.C_ammo = item[itemnum].ammocap;
-
 	player.C_weapon = itemnum;
+
+	player.C_ammo = 0;
 	
+	player.C_ammocap = item[itemnum].ammocap;
+	}
 	break;
 
 	default :
@@ -712,15 +724,15 @@ case 1:
 	printw("you found some bandages \n ");
 	break;
 case 2: 
-	player_inv.amount[7] = player_inv.amount[7] + (rand()%20 + 1);
+	player_inv.amount[3] = player_inv.amount[3] + (rand()%20 + 1);
 	printw("you found some pistol ammo \n ");
 	break;
 case 3: 
-	player_inv.amount[8] = player_inv.amount[8] + (rand()%20 + 1);
+	player_inv.amount[7] = player_inv.amount[7] + (rand()%20 + 1);
 	printw("you found some rifle ammo \n");
 	break;
 case 4:
-	player_inv.amount[6] = player_inv.amount[6] + (rand()%20 + 1);
+	player_inv.amount[4] = player_inv.amount[4] + (rand()%20 + 1);
 	printw("you found some shotgun shells \n");
 	break;
 case 5: 
@@ -728,7 +740,7 @@ case 5:
 	printw("you found a knife \n");
 	break;
 case 6:	
-	player_inv.amount[5]++;
+	player_inv.amount[8]++;
 	printw("you found a bomb \n ");
 	break;
 
