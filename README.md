@@ -6,5 +6,7 @@ personal learning experiment. If you are experienced with C and care enough to g
 
 progress:
 
-Loading firearms is now possible but now im going to have to figure out how to handle swapping weapons and what to do with that ammo inside the gun.
-Im also going to have to fix some of the glaring bugs in order to make things more presentable.
+OK for now when weapons are swapped the ammo is added back into your backpack later ill make it so the weapon is auto loaded every time you equip it or 
+something.
+im still  going to have to fix some of the glaring bugs in order to make things more presentable.
+But  next im going to start fixing up the combat.

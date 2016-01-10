@@ -28,7 +28,7 @@ int ammocap;
 
 int accuracy;
 
-
+int ammotype;
 
 } item[50];
 
@@ -58,8 +58,8 @@ int accuracy;
 int ammocap;
 int weapon;
 int number;
-
-while(fscanf(data,"%s %d %d %d %d %d %d %d %d",name,&type,&mod,&damage,&range,&accuracy,&ammocap,&weapon,&number)!= EOF){
+int ammotype;
+while(fscanf(data,"%s %d  %d %d %d %d %d %d %d %d",name,&type,&mod,&damage,&range,&accuracy,&ammocap,&weapon,&ammotype,&number)!= EOF){
 	strcpy(item[number].name, name);
 	item[number].type = type;
 	item[number].mod = mod;
@@ -68,6 +68,7 @@ while(fscanf(data,"%s %d %d %d %d %d %d %d %d",name,&type,&mod,&damage,&range,&a
 	item[number].accuracy = accuracy;
 	item[number].ammocap = ammocap;
 	item[number].weapon = weapon;
+	item[number].ammotype = ammotype;
 
 }
 

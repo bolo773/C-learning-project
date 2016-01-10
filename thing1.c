@@ -152,7 +152,7 @@ int C_ammo;
 int C_weapon;
 
 int C_ammocap;
-
+int C_ammotype;
 };
 
 
@@ -239,7 +239,8 @@ initscr();
 player_inv.amount[0] = 1;
 player_inv.amount[2] = 1;
 player_inv.amount[3] = 40;
-
+player_inv.amount[4]= 20;
+player_inv.amount[5]= 1;
 printw("what would you like to do? (1)game (2)dev_godmode \n");
 
 refresh();
@@ -508,7 +509,7 @@ int i;
 
 
 	case 2:
-		if(item[itemnum].weapon == player.C_weapon && player_inv.amount[itemnum]) {
+		if((itemnum == player.C_ammotype) && player_inv.amount[itemnum]) {
 				printw("ammo match \n");
 				while(player.C_ammo != player.C_ammocap){
 				player_inv.amount[itemnum]--;
@@ -522,6 +523,11 @@ int i;
 	case 3:
 
 	if (player_inv.amount[itemnum]>0 && player.C_weapon != itemnum){
+	
+		if (player.C_weapon > 0 ) player_inv.amount[player.C_ammotype] = player_inv.amount[player.C_ammotype] + player.C_ammo;
+	player.C_ammo = 0;
+
+	player.C_ammotype = item[itemnum].ammotype;
 
 	player.weapon_damage = item[itemnum].damage;
 
@@ -530,10 +536,10 @@ int i;
  	player.weapon_range = item[itemnum].range; 
 
 	player.C_weapon = itemnum;
-
-	player.C_ammo = 0;
 	
 	player.C_ammocap = item[itemnum].ammocap;
+	
+	printw("equipped weapon \n ");
 	}
 	break;
 
