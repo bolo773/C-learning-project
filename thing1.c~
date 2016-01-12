@@ -813,8 +813,7 @@ enemy1.damage = monster[0].max_damage;
 enemy1.accuracy = monster[0].accuracy;
 
 while (player.C_HP > 0){
-printw("a %s appears \n",monster[0].name);
-printw("its hp is %d",monster[0].max_health);
+
 printw("What do you wawnt to do? \n ");
 
 printw("(1) attack (2) run (3)item \n ");
