@@ -2,8 +2,6 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "itemval.h"
-
-
 FILE *data2;
 
 
@@ -33,6 +31,7 @@ int accuracy;
 
 int ammo_cap;
 
+int melee;
 
 
 };
@@ -159,6 +158,7 @@ int C_weapon;
 
 int C_ammocap;
 int C_ammotype;
+int C_weapon_melee;
 };
 
 
@@ -235,12 +235,17 @@ main (){
 init_monsters();
 itemload();
 
+
+
+
 int a;
 
 
 landscape();
 
 initscr();
+
+
 
 player_inv.amount[0] = 1;
 player_inv.amount[2] = 1;
@@ -251,7 +256,7 @@ printw("what would you like to do? (1)game (2)dev_godmode \n");
 
 refresh();
 
-scanf("%d",&a);
+scanw("%d",&a);
 
 if(a == 1){
 
@@ -327,7 +332,7 @@ printw("choos 1 to increase \n (1)vitality (2)fitness (3)smarts (4)coordination 
 refresh();
 
 
-scanf("%li",&a);
+scanw("%li",&a);
 
 clear();
 
@@ -400,6 +405,7 @@ printw("shooting: %d \n", player.shooting);
 refresh();
 
 printw("press any key to continue \n");
+sc();
 getch();
 
 plot();
@@ -453,7 +459,7 @@ init_monsters(){
 	int max_health;
 	int accuracy;
 	int a;
-while(fscanf(data2,"%s %d  %d %d ",name,&max_damage,&max_health,&accuracy)!= EOF){
+while(fscanf(data2,"%s %d  %d %d",name,&max_damage,&max_health,&accuracy)!= EOF){
 strcpy(monster[a].name,name);
 monster[a].max_damage = max_damage;
 monster[a].max_health = max_health;
@@ -492,7 +498,7 @@ printw("what would you like to do? \n");
 printw(" (1) use  (2) nothing \n ");
 
 refresh();
-scanf("%d",&a);
+scanw("%d",&a);
 
 if (a == 1){
 
@@ -500,7 +506,7 @@ if (a == 1){
 printw("what item? \n ");
 
 refresh();
-scanf("%d",&a);
+scanw("%d",&a);
 
 	for(i=0; i < 51; ){
 		if( item[i].callnum == a) {
@@ -570,6 +576,8 @@ int i;
 	player.C_weapon = itemnum;
 	
 	player.C_ammocap = item[itemnum].ammocap;
+
+	player.C_weapon_melee = item[itemnum].melee;
 	
 	printw("equipped weapon \n ");
 	}
@@ -588,6 +596,11 @@ int i;
 
 
 
+
+
+int sc() {
+  	
+}
 
 // this function will do a few thiings:
 //it will print out important information for the player nice and neat
@@ -610,7 +623,7 @@ printw("Health: %d / %d \n ",player.C_HP,player.HP);
 printw("What to do?: (1)go (2)open inventory (3)scavange (4) quit game (5) list stats \n");
 
 refresh();
-scanf("%d",&a);
+scanw("%d",&a);
 clear();
 
 switch(a){
@@ -656,7 +669,7 @@ printw("move where? \n ");
 printw("(1)right  (2)left  (3)down  (4)up  \n");
 
 refresh();
-scanf("%d",&a);
+scanw("%d",&a);
 clear();
 
 switch (a){
@@ -821,12 +834,22 @@ printw("(1) attack (2) run (3)item \n ");
 
 refresh();
 
-scanf("%d",&a);
-
+scanw("%d",&a);
+clear();
 switch(a){
 
 case 1:
+	if (player.C_weapon_melee){	
+
 	enemy1.C_health = enemy1.C_health - ((player.fighting/4 + player.weapon_damage) + (rand() % (player.fighting/2)+1));
+	} else{
+	
+	if(player.C_ammo > 0){
+	enemy1.C_health = enemy1.C_health - ((player.shooting/4 + player.weapon_damage) + (rand() % (player.shooting/2)+1));
+	player.C_ammo--;
+	}
+	}
+	
 	printw("enemy HP: %d \n", enemy1.C_health);
 	break;
 case 2:
@@ -878,3 +901,7 @@ player.xp_to_next = player.xp_to_next + player.level * player.xp_to_next/4;
 
 
 }
+
+
+
+
