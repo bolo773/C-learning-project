@@ -1,7 +1,4 @@
 -improve combat
-	-list damage done and recieved 
-	-clean up output
-	-fully implement stats
 -make it so map information is stored on .map files
 -improve user input system
 -add area descriptions
