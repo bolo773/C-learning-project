@@ -15,7 +15,7 @@ itemload();
 int a;
 
 
-landscape();
+landscape("map1.map");
 
 initscr();
 
@@ -50,6 +50,18 @@ else {
 
 
 printw("dev_godmode enabled \n");
+printw(" warning game is very incomplete \n" );
+player.fitness = 100;
+player.vitality = 100;
+player.smarts = 100;
+player.coordination = 100;
+
+getch();
+
+clear();
+
+
+plot();
 
 }
 
