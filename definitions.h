@@ -5,7 +5,21 @@
 FILE *data2;
 FILE *mapdata;
 
+//globalstuff
 
+int parent_x;
+int parent_y;
+
+
+WINDOW * out;
+
+WINDOW * in;
+
+WINDOW * map;
+
+WINDOW * stats;
+
+WINDOW * bor;
 //enemy values that are initialized during combat
 
 struct enemy {
@@ -222,6 +236,36 @@ struct entity player;
 // functions
 
 
+//window creator
+
+createw(){
+
+getmaxyx(stdscr, parent_y, parent_x);
+map = newwin(parent_y/2, parent_x/2,parent_y/2-3,0);
+stats = newwin(parent_y/2, parent_x/2, parent_y/2-3,parent_x/2);
+out = newwin(parent_y/2-5,parent_x-2,1,1);
+bor = newwin(parent_y/2 - 3, parent_x,0,0);
+in = newwin(3, parent_x, parent_y - 3,0);
+
+wborder(map,'+','+','+','+','+','+','+','+');
+wborder(stats,'+','+','+','+','+','+','+','+');
+wborder(bor,'+','+','+','+','+','+','+','+');
+wborder(in,'+','+','+','+','+','+','+','+');
+
+
+idlok(out,TRUE);
+scrollok(out,TRUE);
+keypad(in,TRUE);
+
+wrefresh(bor);
+wrefresh(out);
+wrefresh(in);
+wrefresh(stats);
+wrefresh(map);
+
+
+}
+
 
 
 //this function initializes the landscape and impassible objects
@@ -260,7 +304,7 @@ fclose(mapdata);
 charc(){
 
 
-printw("welcome to the charecter creation tool \n");
+wprintw(out,"welcome to the charecter creation tool \n");
 
 
 
@@ -273,36 +317,38 @@ player.smarts = 20;
 
 
 int i;
-long a;
+int a;
 int b;
+int w;
 
 for(i=40;i>0;){
-	printw("\n \n \n \n \n \n \n \n \n \n \n \n \n ");
-
-	
-	printw("vitality");
-	for(b= player.vitality/5;b>0;b--){printw("+");}
-	printw("\n");
-	printw("fitness");
-	for(b= player.fitness/5;b>0;b--){printw("+");}
-	printw("\n");
-	printw("smarts");
-	for(b= player.smarts/5;b>0;b--){printw("+");}
-	printw("\n");
-	printw("coordination");
-	for(b= player.coordination/5;b>0;b--){printw("+");}
-	printw("\n");
+	wprintw(out,"vitality");
+	for(b= player.vitality/5;b>0;b--){wprintw(out,"+");}
+	wprintw(out,"\n");
+	wprintw(out,"fitness");
+	for(b= player.fitness/5;b>0;b--){wprintw(out,"+");}
+	wprintw(out,"\n");
+	wprintw(out,"smarts");
+	for(b= player.smarts/5;b>0;b--){wprintw(out,"+");}
+	wprintw(out,"\n");
+	wprintw(out,"coordination");
+	for(b= player.coordination/5;b>0;b--){wprintw(out,"+");}
+	wprintw(out,"\n");
 	
 
 
-printw("choos 1 to increase \n (1)vitality (2)fitness (3)smarts (4)coordination \n (%d left)",i);
+wprintw(out,"choos 1 to increase \n (1)vitality (2)fitness (3)smarts (4)coordination \n (%d left)",i);
 
-refresh();
+wrefresh(out);
 
 
-scanw("%li",&a);
 
-clear();
+
+mvwscanw(in,1,1,"%d",&a);
+
+wclear(out);
+
+
 
 
 if (a<1 || a>4) continue;
@@ -325,7 +371,7 @@ case 4:
 	i--;
 	break;
 default:
-	printw("unrecognized choice");
+	wprintw(out,"unrecognized choice");
 	break;
 }
 
@@ -334,7 +380,7 @@ default:
 }
 
 
-printw("done \n ");
+wprintw(out,"done \n ");
 
 
 
@@ -357,23 +403,23 @@ player.HP = player.fitness;
 player.regen = player.fitness/4;
 player.imunity = player.vitality;
  
-clear();
+wclear(out);
 
-printw("resulting stats:\n");
+wprintw(out,"resulting stats:\n");
 
-printw("small electronics: %d \n", player.small_electronics);
-printw("computers: %d \n",player.computers);
-printw("mechanics: %d \n",player.mechanics);
-printw("locksmith: %d \n",player.locksmith);
-printw("chemistry: %d \n", player.chemistry);
-printw("fighting: %d \n ", player.fighting);
-printw("shooting: %d \n", player.shooting);
+wprintw(out,"small electronics: %d \n", player.small_electronics);
+wprintw(out,"computers: %d \n",player.computers);
+wprintw(out,"mechanics: %d \n",player.mechanics);
+wprintw(out,"locksmith: %d \n",player.locksmith);
+wprintw(out,"chemistry: %d \n", player.chemistry);
+wprintw(out,"fighting: %d \n ", player.fighting);
+wprintw(out,"shooting: %d \n", player.shooting);
 
 
-refresh();
+wrefresh(out);
 
-printw("press any key to continue \n");
-getch();
+wprintw(out,"press any key to continue \n");
+wgetch(in);
 
 plot();
 

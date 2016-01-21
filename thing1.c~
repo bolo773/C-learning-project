@@ -5,6 +5,9 @@
 
 main (){
 
+idlok(out,TRUE);
+scrollok(out,TRUE);
+
 
 init_monsters();
 itemload();
@@ -19,27 +22,28 @@ landscape("map1.map");
 
 initscr();
 
-
+createw();
 
 player_inv.amount[0] = 1;
 player_inv.amount[2] = 1;
 player_inv.amount[3] = 40;
 player_inv.amount[4]= 20;
 player_inv.amount[5]= 1;
-printw("what would you like to do? (1)game (2)dev_godmode \n");
 
-refresh();
+mvwprintw(out,1,1,"what would you like to do? (1)game (2)dev_godmode \n");
 
-scanw("%d",&a);
+wrefresh(out);
+
+mvwscanw(in,1,1,"%d",&a);
 
 if(a == 1){
 
-printw(" warning game is very incomplete \n" );
+wprintw(out," warning game is very incomplete \n" );
 
+wrefresh(out);
+wgetch(in);
 
-getch();
-
-clear();
+wclear(out);
 
 
 charc();
@@ -61,7 +65,7 @@ getch();
 clear();
 
 
-charc();
+plot();
 
 }
 

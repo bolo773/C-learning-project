@@ -6,9 +6,11 @@ personal learning experiment. If you are experienced with C and care enough to g
 
 progress:
 
-OK for now when weapons are swapped the ammo is added back into your backpack later ill make it so the weapon is auto loaded every time you equip it or 
-something.
-im still  going to have to fix some of the glaring bugs in order to make things more presentable.
-But  next im going to start fixing up the combat.
+
 
 combat actually uses your shooting and fighting variables. ammo is now used in combat and a new variable has been added to items called melee wich determines if its a melee weapon or not. 
+
+the screen is now split up into different windows one for the output one for the map one for the stats and one for the input.
+i will eventually use the mouse for scrolling the output window and charecter movement.
+
+finished the code for the map displayer just need to put it into the master.
