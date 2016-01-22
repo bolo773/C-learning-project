@@ -1,6 +1,0 @@
-OBJS = thing1.c
-
-OBJ_NAME = game
-
-all : $(OBJS)
-	gcc $(OBJS) -w -Iinclude -L./include -ltcod -ltcodxx -lncurses -Wl,-rpath=./include -o $(OBJ_NAME)
