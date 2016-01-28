@@ -20,6 +20,12 @@ WINDOW * map;
 WINDOW * stats;
 
 WINDOW * bor;
+
+WINDOW * bor2;
+
+WINDOW * bor3;
+
+WINDOW * bor4;
 //enemy values that are initialized during combat
 
 struct enemy {
@@ -241,23 +247,37 @@ struct entity player;
 createw(){
 
 getmaxyx(stdscr, parent_y, parent_x);
-map = newwin(parent_y/2, parent_x/2,parent_y/2-3,0);
-stats = newwin(parent_y/2, parent_x/2, parent_y/2-3,parent_x/2);
+map = newwin(parent_y/2-2, parent_x/2-2,parent_y/2-2,1);
+stats = newwin(parent_y/2-2, parent_x/2-2, parent_y/2-2,parent_x/2+1);
 out = newwin(parent_y/2-5,parent_x-2,1,1);
+in = newwin(3, parent_x, parent_y-3,0);
+//out window border
 bor = newwin(parent_y/2 - 3, parent_x,0,0);
-in = newwin(3, parent_x, parent_y - 3,0);
+//map border
+bor2 = newwin(parent_y/2, parent_x/2,parent_y/2-3,0);
+//stats border
+bor3 = newwin(parent_y/2, parent_x/2, parent_y/2-3,parent_x/2);
+//in border
+bor4 = newwin(3, parent_x, parent_y - 3,0);
 
-wborder(map,'+','+','+','+','+','+','+','+');
-wborder(stats,'+','+','+','+','+','+','+','+');
+
+
+
 wborder(bor,'+','+','+','+','+','+','+','+');
-wborder(in,'+','+','+','+','+','+','+','+');
 
-
+wborder(bor2,'+','+','+','+','+','+','+','+');
+wborder(bor3,'+','+','+','+','+','+','+','+');
+wborder(bor4,'+','+','+','+','+','+','+','+');
 idlok(out,TRUE);
 scrollok(out,TRUE);
 keypad(in,TRUE);
 
+
+
 wrefresh(bor);
+wrefresh(bor2);
+wrefresh(bor3);
+wrefresh(bor4);
 wrefresh(out);
 wrefresh(in);
 wrefresh(stats);
@@ -266,7 +286,30 @@ wrefresh(map);
 
 }
 
+cgamewindows(){
 
+wclear(out);
+wclear(in);
+wclear(stats);
+wclear(map);
+
+
+
+}
+rgamewindows(){
+
+wrefresh(bor);
+wrefresh(bor2);
+wrefresh(bor3);
+wrefresh(bor4);
+wrefresh(out);
+wrefresh(in);
+wrefresh(stats);
+wrefresh(map);
+
+
+
+}
 
 //this function initializes the landscape and impassible objects
 //(unfinished and unimplemented)
@@ -299,6 +342,47 @@ fclose(mapdata);
 
 }
 
+
+
+//map drawing function
+drawmap(){
+
+
+int cpx; 
+int cpy;
+int i;
+int q;
+int c;
+int emptys;
+cpy = player.Y+4;
+
+for(q=0; q<=8;q++){
+
+	for(emptys = 0; emptys <= ((parent_x/2-9)/2);emptys++) wprintw(map," ");
+ cpx = player.X-4;
+	for(i = 0;i<=8;i++){
+		for(c=0;c<=100;c++){
+			if ((object[c].X==cpx)&&(object[c].Y==cpy)){
+			wprintw(map,"X");
+			break;
+				}
+			}
+		if (c==101) wprintw(map,"O");
+		cpx++;
+			}
+		
+wprintw(map,"\n");
+
+
+cpy--;
+
+}
+
+
+
+
+
+}
 //charecter creation function
 
 charc(){
@@ -421,6 +505,7 @@ wrefresh(out);
 wprintw(out,"press any key to continue \n");
 wgetch(in);
 
+cgamewindows();
 plot();
 
 
@@ -433,22 +518,22 @@ plot();
 
 liststats(){
 
-printw("small electronics: %d \n",player.small_electronics);
-printw("computers: %d \n", player.computers);
-printw("mechanics: %d \n",player.mechanics);
-printw("locksmithing: %d \n",player.locksmith);
-printw("chemistry: %d \n",player.chemistry);
-printw("fighting: %d \n",player.fighting);
-printw("shooting: %d \n",player.shooting);
+wprintw(out,"small electronics: %d \n",player.small_electronics);
+wprintw(out,"computers: %d \n", player.computers);
+wprintw(out,"mechanics: %d \n",player.mechanics);
+wprintw(out,"locksmithing: %d \n",player.locksmith);
+wprintw(out,"chemistry: %d \n",player.chemistry);
+wprintw(out,"fighting: %d \n",player.fighting);
+wprintw(out,"shooting: %d \n",player.shooting);
 
 
-printw("current weapon %d",player.C_weapon);
+wprintw(out,"current weapon %d",player.C_weapon);
 
-printw("weapon damage: %d \n",player.weapon_damage);
-printw("weapon range: %d \n",player.weapon_range);
-printw("weapon accurracy: %d \n", player.weapon_range);
+wprintw(out,"weapon damage: %d \n",player.weapon_damage);
+wprintw(out,"weapon range: %d \n",player.weapon_range);
+wprintw(out,"weapon accurracy: %d \n", player.weapon_range);
 
-printw("ammo in gun:%d",player.C_ammo);
+wprintw(out,"ammo in gun:%d",player.C_ammo);
 }
 
 //this loads the information on the enemies
@@ -490,7 +575,7 @@ for(b = 0; b<51;b++)
 	if(player_inv.amount[b]) {
 
 
-printw("%s:%d \n",item[b].name,player_inv.amount[b]);
+wprintw(out,"%s:%d \n",item[b].name,player_inv.amount[b]);
 
 	e++;
 
@@ -500,23 +585,23 @@ printw("%s:%d \n",item[b].name,player_inv.amount[b]);
 
 
 
-printw("what would you like to do? \n");
-printw(" (1) use  (2) nothing \n ");
+wprintw(out,"what would you like to do? \n");
+wprintw(out," (1) use  (2) nothing \n ");
 
-refresh();
-scanw("%d",&a);
+rgamewindows();
+mvwscanw(in,1,1,"%d",&a);
 
 if (a == 1){
 
 
-printw("what item? \n ");
+wprintw(out,"what item? \n ");
 
-refresh();
-scanw("%d",&a);
+rgamewindows();
+mvwscanw(in,1,1,"%d",&a);
 
 	for(i=0; i < 51; ){
 		if( item[i].callnum == a) {
-			printw("found item \n");
+			wprintw(out,"found item \n");
 			use(i);
 			
 		
@@ -528,8 +613,8 @@ i++;
 }
 
 }
-printw("press any key to continue");
-getch();
+wprintw(out,"press any key to continue");
+wgetch(in);
 
 return;
 }
@@ -544,18 +629,18 @@ int i;
 	if (player_inv.amount[itemnum] > 0){
 	player.C_HP = player.C_HP + item[itemnum].mod;
 	player_inv.amount[itemnum]--;
-	printw("used item actually \n");
+	wprintw(out,"used item actually \n");
 	}
 	break;
 
 
 	case 2:
 		if((itemnum == player.C_ammotype) && player_inv.amount[itemnum]) {
-				printw("ammo match \n");
+				wprintw(out,"ammo match \n");
 				while(player.C_ammo != player.C_ammocap){
 				player_inv.amount[itemnum]--;
 				player.C_ammo ++;
-			printw("used ammo");				
+			wprintw(out,"used ammo \n");				
 			}
 		}
 
@@ -582,7 +667,7 @@ int i;
 
 	player.C_weapon_melee = item[itemnum].melee;
 	
-	printw("equipped weapon \n ");
+	wprintw(out,"equipped weapon \n ");
 	}
 	break;
 
@@ -603,55 +688,42 @@ int i;
 //secondly it will provide a place where the player will make the //////majority of the choices
 
 
+int printstats(){
+
+
+wprintw(stats,"Health: %d / %d \n ",player.C_HP,player.HP);
+
+
+
+}
+
 
 int plot(){
+
 
 player.C_HP = player.HP;
 player.X=0;
 player.Y=0;
 
-int a;
 
 while(player.C_HP>0){
 
-a = 0;
 
-printw("Health: %d / %d \n ",player.C_HP,player.HP);
 
-printw("What to do?: (1)go (2)open inventory (3)scavange (4) quit game (5) list stats \n");
+printstats();
 
-refresh();
-scanw("%d",&a);
-clear();
+wprintw(out,"type 'help' for a list of commands");
+drawmap();
+rgamewindows();
+command();
 
-switch(a){
-case 1:
-	shift();
-	break;
-case 2: 
-	list_Pinv();
-	break;
+cgamewindows();
 
-case 3:
-	
-
-case 4:
-	endwin();
-	return 1;
-	
-case 5:
-	liststats();
-	break;
-default:
-	break;
 
 
 
 }
 
-
-
-}
 
 
 }
@@ -659,23 +731,22 @@ default:
 
 //this is the movement function for the main charecter
 
-shift(){
+shift( int a){
 
-int a;
 int i;
+drawmap();
+printstats();
 
-printw("move where? \n ");
-printw("(1)right  (2)left  (3)down  (4)up  \n");
 
-refresh();
-scanw("%d",&a);
+rgamewindows();
+
 clear();
 
 switch (a){
 case 1:
 	for(i=0; i<101; i++){
 	if(((object[i].X) == player.X+1) && (object[i].Y== player.Y)){
-		printw("cant go there something in way");
+		wprintw(out,"cant go there something in way \n");
 		break;}
 		}
 	
@@ -685,7 +756,7 @@ case 1:
 case 2:
 	for(i=0; i<101; i++){
 	if(((object[i].X) == player.X-1) && (object[i].Y== player.Y)){
-		printw("cant go there something in way");
+		wprintw(out,"cant go there something in way\n");
 		break;}
 		}
 	if (i==101 )player.X--;
@@ -693,7 +764,7 @@ case 2:
 case 3:
 	for(i=0; i<101; i++){
 	if(((object[i].X) == player.X) && (object[i].Y == player.Y-1)){
-		printw("cant go there something in way");
+		wprintw(out,"cant go there something in way\n");
 		break;}
 		}
 
@@ -702,7 +773,7 @@ case 3:
 case 4:
 	for(i=0; i<101; i++){
 	if(((object[i].X) == player.X) && (object[i].Y== player.Y+1)){
-		printw("cant go there something in way");
+		wprintw(out,"cant go there something in way \n");
 		break;}
 		}
 	if(i == 101) player.Y++;
@@ -712,7 +783,7 @@ default:
 
 }
 
-printw("position %d,%d \n ",player.X,player.Y);
+wprintw(out,"position %d,%d \n ",player.X,player.Y);
 encounter();
 
 }
@@ -728,22 +799,22 @@ int roll = (rand()%3)+1;
 switch(roll){
 
 case 1:
-	printw("encounter 1 will be combat \n ");
+	wprintw(out,"encounter 1 will be combat \n ");
 	combat();
 	break;
 case 2:
-	printw("encounter 2 will be an obstacle or trap \n ");
+	wprintw(out,"encounter 2 will be an obstacle or trap \n ");
 	break;
 
 case 3:
-	printw("encounter 3 will be some sort fo low grade loot \n ");
+	wprintw(out,"encounter 3 will be some sort fo low grade loot \n ");
 	looting();
 	break;
 
 
 
 default:
-	printw("something has gone wrong");
+	wprintw(out,"something has gone wrong");
 	break;
 
 refresh();
@@ -757,35 +828,36 @@ refresh();
 
 
 //split this function into 2 parts
+//make it so it uses the name stored in item.name
 looting(){
-
+cgamewindows();
 int a = (rand()%6 +1);
 
 switch(a){
 
 case 1:
 	player_inv.amount[0]++;
-	printw("you found some bandages \n ");
+	wprintw(out,"you found some bandages \n ");
 	break;
 case 2: 
 	player_inv.amount[3] = player_inv.amount[3] + (rand()%20 + 1);
-	printw("you found some pistol ammo \n ");
+	wprintw(out,"you found some pistol ammo \n ");
 	break;
 case 3: 
 	player_inv.amount[7] = player_inv.amount[7] + (rand()%20 + 1);
-	printw("you found some rifle ammo \n");
+	wprintw(out,"you found some rifle ammo \n");
 	break;
 case 4:
 	player_inv.amount[4] = player_inv.amount[4] + (rand()%20 + 1);
-	printw("you found some shotgun shells \n");
+	wprintw(out,"you found some shotgun shells \n");
 	break;
 case 5: 
 	player_inv.amount[1]++;
-	printw("you found a knife \n");
+	wprintw(out,"you found a knife \n");
 	break;
 case 6:	
 	player_inv.amount[8]++;
-	printw("you found a bomb \n ");
+	wprintw(out,"you found a bomb \n ");
 	break;
 
 
@@ -794,8 +866,9 @@ default:
 
 }
 
-printw("press any key to continue \n ");
-getch();
+rgamewindows();
+wprintw(out,"press any key to continue \n ");
+wgetch(in);
 
 
 }
@@ -805,6 +878,7 @@ getch();
 
 combat(){
 
+cgamewindows();
 
 int a;
 
@@ -818,15 +892,19 @@ enemy1.hitdif = monster[0].hitdif;
 //add 2 new properties hit difficulty and experience bonus
 
 while (player.C_HP > 0){
-printw("a %s appears \n",monster[0].name);
-printw("its hp is %d",monster[0].max_health);
-printw("What do you wawnt to do? \n ");
 
-printw("(1) attack (2) run (3)item \n ");
+drawmap();
+printstats();
 
-refresh();
-scanw("%d",&a);
-clear();
+wprintw(out,"a %s appears \n",monster[0].name);
+wprintw(out,"its hp is %d",monster[0].max_health);
+wprintw(out,"What do you wawnt to do? \n ");
+
+wprintw(out,"(1) attack (2) run (3)item \n ");
+
+rgamewindows();
+mvwscanw(in,1,1,"%d",&a);
+cgamewindows();
 
 switch(a){
 
@@ -835,7 +913,7 @@ case 1:
 		if((player.weapon_accuracy/2 +  player.fighting/2 + rand()%100) >= enemy1.hitdif){	
 
 	enemy1.C_health = enemy1.C_health - ((player.fighting/4 + player.weapon_damage) + (rand() % (player.fighting/2)+1));}
-	else {printw("you missed!! \n ");} 
+	else {wprintw(out,"you missed!! \n ");} 
 
 	}
 
@@ -844,26 +922,26 @@ case 1:
 			if((player.weapon_accuracy/2 +  player.shooting/2 + rand()%100) >= 100){
 			enemy1.C_health = enemy1.C_health - ((player.shooting/4 + player.weapon_damage) + (rand() % (player.shooting/2)+1));
 			player.C_ammo--;
-	}else{printw("you missed! \n");
+	}else{wprintw(out,"you missed! \n");
 			player.C_ammo--;}
 	}
 	}
 	
-	printw("enemy HP: %d \n", enemy1.C_health);
+	wprintw(out,"enemy HP: %d \n", enemy1.C_health);
 	break;
 case 2:
-	printw("you attempt to run.... \n " );
+	wprintw(out,"you attempt to run.... \n " );
 	if(rand()%100 > 50 ) return;
 	else printf("it failed \n");
 	break;
 
 case 3:
-	 printw("inventory stuff goes here.\n ");
+	 wprintw(out,"inventory stuff goes here.\n ");
 	list_Pinv();
 	break;
 
 default:
-	printw("something went wrong");
+	wprintw(out,"something went wrong");
 	break;
 
 
@@ -878,7 +956,7 @@ player.C_HP = player.C_HP - ((rand() % enemy1.damage)/2 + enemy1.damage/2 );
 if (player.C_HP <= 0 ) death();
 
 
-printw(" HP: %d \n", player.C_HP );
+wprintw(out," HP: %d \n", player.C_HP );
 
 
 

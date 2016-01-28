@@ -13,4 +13,4 @@ combat actually uses your shooting and fighting variables. ammo is now used in c
 the screen is now split up into different windows one for the output one for the map one for the stats and one for the input.
 i will eventually use the mouse for scrolling the output window and charecter movement.
 
-finished the code for the map displayer just need to put it into the master.
+map display done and commands are working minimally

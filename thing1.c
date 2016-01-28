@@ -1,6 +1,6 @@
 #include "ncurses.h"
 #include "definitions.h"
-
+#include "cinterp.h"
 //main starting point
 
 main (){
@@ -51,17 +51,14 @@ charc();
 else {
 
 
-printw("dev_godmode enabled \n");
-printw(" warning game is very incomplete \n" );
+wprintw(out,"dev_godmode enabled \n");
+wprintw(out," warning game is very incomplete \n" );
 player.fitness = 100;
 player.vitality = 100;
 player.smarts = 100;
 player.coordination = 100;
 
-getch();
-
-clear();
-
+mvwgetch(in,1,1);
 
 plot();
 
