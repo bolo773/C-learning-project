@@ -714,7 +714,7 @@ int printstats(){
 
 wprintw(stats,"Health: %d / %d \n ",player.C_HP,player.HP);
 wprintw(stats,"Position: %d,%d \n ",player.X,player.Y);
-wprintw(stats,"Ammo: %d/%d \n",player.C_ammo,player.C_ammocap);
+
 
 }
 
