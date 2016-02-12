@@ -6,11 +6,11 @@ personal learning experiment. If you are experienced with C and care enough to g
 
 progress:
 
-
-
-combat actually uses your shooting and fighting variables. ammo is now used in combat and a new variable has been added to items called melee wich determines if its a melee weapon or not. 
+ 
 
 the screen is now split up into different windows one for the output one for the map one for the stats and one for the input.
 i will eventually use the mouse for scrolling the output window and charecter movement.
 
-map display done and commands are working minimally
+map display done and commands are working a bit
+
+enemies are now random and mapfiles now contain data on what enemies should appear in the area still lots of bugs that need to be fixed

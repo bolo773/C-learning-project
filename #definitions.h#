@@ -1,6 +1,6 @@
 
 #include "itemval.h"
-#include "time.h"
+
 //data files
 FILE *data2;
 FILE *mapdata;
@@ -27,9 +27,6 @@ WINDOW * bor2;
 WINDOW * bor3;
 
 WINDOW * bor4;
-
-
-
 //enemy values that are initialized during combat
 
 struct enemy {
@@ -83,7 +80,6 @@ int amount[50];
 
 
 };
-
 
 
 
@@ -195,18 +191,6 @@ int C_ammotype;
 int C_weapon_melee;
 };
 
-
-
-struct mapinfo{
-	
-int p_enemys[9];
-int enemy_count;
-int blocks;
-struct entity npcs[20];
-	
-	
-	
-	} current_map;
 // impassible object in game world
 struct mass {
 
@@ -339,32 +323,16 @@ int x;
 
 int y;
 
-int feild;
-int enemy_types;
-int n_of_blocks;
-
 int i;
 
-char field[20];
+for( i=0;fscanf(mapdata,"%d %d",&x,&y)!= EOF;i++){
 
-fscanf(mapdata,"%d %d",&current_map.blocks,&current_map.enemy_count);
-for( i=0; i<current_map.blocks;i++){
-
-
-fscanf(mapdata,"%d %d",&x,&y);
 object[i].X = x;
 
 object[i].Y = y;
 
 
 
-
-}
-
-
-for(i=0;fscanf(mapdata,"%d",&enemy_types)!=EOF;i++){
-
-current_map.p_enemys[i] = enemy_types;
 
 }
 
@@ -416,9 +384,6 @@ cpy--;
 
 
 }
-
-
-
 //charecter creation function
 
 charc(){
@@ -750,8 +715,7 @@ int printstats(){
 wprintw(stats,"Health: %d / %d \n ",player.C_HP,player.HP);
 wprintw(stats,"Position: %d,%d \n ",player.X,player.Y);
 wprintw(stats,"Ammo: %d/%d \n",player.C_ammo,player.C_ammocap);
-wprintw(stats,"enemys radar %d",current_map.p_enemys);
-wprintw(stats, "total blocks %d",current_map.blocks);
+
 }
 
 
@@ -931,26 +895,6 @@ wgetch(in);
 }
 
 
-//random enemy picker
-
-int picker(){
-	
-	int wheel = 0;
-	int i;
-	int matched;
-
-		wheel = rand()%current_map.enemy_count;
-		return current_map.p_enemys[wheel];
-		 
-
-		}
-	
-	
-	
-	
-	
-
-
 //combat function
 
 combat(){
@@ -958,17 +902,14 @@ combat(){
 cgamewindows();
 
 int a;
-int picked;
 
 struct enemy enemy1 ;
-
 			//make this random sometime (based on area)
-picked = picker();
-enemy1.max_health = monster[picked].max_health;
-enemy1.C_health = monster[picked].max_health;	
-enemy1.damage = monster[picked].max_damage;
-enemy1.accuracy = monster[picked].accuracy;
-enemy1.hitdif = monster[picked].hitdif;
+enemy1.max_health = monster[0].max_health;
+enemy1.C_health = monster[0].max_health;	
+enemy1.damage = monster[0].max_damage;
+enemy1.accuracy = monster[0].accuracy;
+enemy1.hitdif = monster[0].hitdif;
 //add 2 new properties hit difficulty and experience bonus
 
 while (player.C_HP > 0){
@@ -976,9 +917,9 @@ while (player.C_HP > 0){
 drawmap();
 printstats();
 
-wprintw(out,"a %s appears \n",monster[picked].name);
-wprintw(out,"its hp is %d",monster[picked].max_health);
-wprintw(out,"What do you want to do? \n ");
+wprintw(out,"a %s appears \n",monster[0].name);
+wprintw(out,"its hp is %d",monster[0].max_health);
+wprintw(out,"What do you wawnt to do? \n ");
 
 wprintw(out,"(1) attack (2) run (3)item \n ");
 
@@ -992,8 +933,7 @@ case 1:
 	if (player.C_weapon_melee){
 		if((player.weapon_accuracy/2 +  player.fighting/2 + rand()%100) >= enemy1.hitdif){	
 
-	enemy1.C_health = enemy1.C_health - ((player.fighting/4 + player.weapon_damage) + (rand() % (player.fighting/2)+1));
-		}
+	enemy1.C_health = enemy1.C_health - ((player.fighting/4 + player.weapon_damage) + (rand() % (player.fighting/2)+1));}
 	else {wprintw(out,"you missed!! \n ");} 
 
 	}
@@ -1028,13 +968,7 @@ default:
 
 }
 
-if (enemy1.C_health  <= 0 ) {
-	
-	printw(out,"enemy killed! \n");
-	
-	wgetch(in);
-	
-	return;}
+if (enemy1.C_health  <= 0 ) return;
 
 
 
@@ -1043,7 +977,7 @@ player.C_HP = player.C_HP - ((rand() % enemy1.damage)/2 + enemy1.damage/2 );
 if (player.C_HP <= 0 ) death();
 
 
-wprintw(out,"HP: %d \n", player.C_HP );
+wprintw(out," HP: %d \n", player.C_HP );
 
 
 
