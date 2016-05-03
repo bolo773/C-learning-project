@@ -81,6 +81,8 @@ wclear(out);
 load();
 
 plot();
+
+return 0;
 }
 }
 

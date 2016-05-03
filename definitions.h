@@ -5,7 +5,7 @@
 FILE *data2;
 FILE *mapdata;
 FILE *savedata;
-
+FILE *npcdata;
 //globalstuff
 
 int parent_x;
@@ -28,6 +28,8 @@ WINDOW * bor3;
 
 WINDOW * bor4;
 
+WINDOW * DEV;
+
 
 
 //enemy values that are initialized during combat
@@ -45,6 +47,53 @@ int accuracy;
 int hitdif;
 
 };
+
+struct new_enemy{
+	
+	int max_health;
+	int C_health;
+	int speed;
+	int x;
+	int y;
+		
+	
+	
+	
+	} actor[20];
+
+struct dialogue{
+	
+	char string[100];
+	
+	
+	};
+
+//memo: command 1(or 0 ) will be the starting command to call all other commands
+
+struct commands{
+	
+	char action[10];
+	int param;
+	
+	
+	
+	};
+
+
+struct NPC{
+	int x;
+	int y;
+	
+	char mapl[20];
+	
+	struct dialogue npc_dialog[20];
+	
+	struct commands npc_commands[50];
+	
+	}npc[100];
+
+
+
 
 //weapon values (outdated)
 struct weapon{
@@ -276,14 +325,15 @@ bor2 = newwin(parent_y/2, parent_x/2,parent_y/2-3,0);
 bor3 = newwin(parent_y/2, parent_x/2, parent_y/2-3,parent_x/2);
 //in border
 bor4 = newwin(3, parent_x, parent_y - 3,0);
+//developer / debugging terminal
+DEV = newwin(parent_y/2-5,parent_x-2,1,1);
 
 
 
+wborder(bor,'|','|','-','-','+','+','+','+');
 
-wborder(bor,'+','+','+','+','+','+','+','+');
-
-wborder(bor2,'+','+','+','+','+','+','+','+');
-wborder(bor3,'+','+','+','+','+','+','+','+');
+wborder(bor2,'|','|','-','-','+','+','+','+');
+wborder(bor3,'|','|','-','-','+','+','+','+');
 wborder(bor4,'+','+','+','+','+','+','+','+');
 idlok(out,TRUE);
 scrollok(out,TRUE);
@@ -302,6 +352,9 @@ wrefresh(map);
 
 
 }
+
+
+//this clears all game windows
 
 cgamewindows(){
 
@@ -335,19 +388,62 @@ landscape(char *map){
 
 mapdata = fopen(map,"r");
 
+
+if(!mapdata){
+
+wprintw(out,"file does not exits \n");
+
+wprintw(out,"press any key to continue\n");
+
+
+
+rgamewindows();
+
+wgetch(in);
+
+return;	 
+
+	}
+
+
 int x;
 
 int y;
 
-int feild;
-int enemy_types;
-int n_of_blocks;
+int enemy_types=0;
+int n_of_blocks=0;
 
 int i;
 
-char field[20];
 
-fscanf(mapdata,"%d %d",&current_map.blocks,&current_map.enemy_count);
+fscanf(mapdata,"%d",&current_map.blocks);
+
+
+
+
+for( i=0; i<100 ;i++){
+
+
+object[i].X = 0;
+
+object[i].Y = 0;
+
+
+
+
+}
+
+
+current_map.enemy_count = 0;
+
+for(i=0;i<10;i++){
+	
+	current_map.p_enemys[i] = 0;
+	
+	
+	}
+
+
 for( i=0; i<current_map.blocks;i++){
 
 
@@ -362,19 +458,91 @@ object[i].Y = y;
 }
 
 
-for(i=0;fscanf(mapdata,"%d",&enemy_types)!=EOF;i++){
 
-current_map.p_enemys[i] = enemy_types;
+for(i=0;fscanf(mapdata,"%d",&current_map.p_enemys[i])!=EOF;i++){
 
+current_map.enemy_count = i + 1;
 }
+
+
 
 fclose(mapdata);
 
 
 
 
+
+
 }
 
+
+
+loadnpc(){
+	
+	
+	
+	char name[20] = "npc000.npd";
+	
+	
+	int i;
+	
+	
+	
+	 
+	 	wprintw(out,"npcs loading...");
+	
+			rgamewindows();
+			
+			
+			
+	for (i=0; i<10;i++){
+		
+	
+		
+		
+			
+		
+			wprintw(DEV,"%s \n",name);
+			
+			rgamewindows();
+			
+		if(npcdata = fopen(name,"r")){
+			
+			
+			fscanf(npcdata,"%s",npc[i].mapl);
+			
+		 	wprintw(DEV,"%s \n",npc[i].mapl);
+			if (strcmp(npc[i].mapl,"map1.map")==0){
+			fscanf(npcdata,"%d %d",&npc[i].x,&npc[i].y);
+			
+			fclose(npcdata);
+
+					}
+					
+					
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			}else wprintw(DEV,"couldnt open file\n");
+	
+	
+		name[5]++;
+	
+	
+	
+	
+	
+	}
+
+}
 
 
 //map drawing function
@@ -387,6 +555,10 @@ int i;
 int q;
 int c;
 int emptys;
+
+int counter;
+int found;
+
 cpy = player.Y+4;
 
 for(q=0; q<=8;q++){
@@ -396,7 +568,21 @@ for(q=0; q<=8;q++){
 	for(i = 0;i<=8;i++){
 		for(c=0;c<=100;c++){
 			if ((object[c].X==cpx)&&(object[c].Y==cpy)){
-			wprintw(map,"X");
+				
+				
+				
+				for (counter = 0;counter<10;counter++){
+							found = 0;
+					if (cpx == npc[counter].x && cpy ==npc[counter].y ){
+							wprintw(map,"P");
+							found = 1;
+							break;
+								}
+					
+					
+					}
+					
+			if(!found) wprintw(map,"X");
 			break;
 				}
 			}
@@ -622,7 +808,7 @@ for(b = 0; b<51;b++)
 	if(player_inv.amount[b]) {
 
 
-wprintw(out,"%s:%d \n",item[b].name,player_inv.amount[b]);
+wprintw(out,"%d. %s:%d \n",e,item[b].name,player_inv.amount[b]);
 
 	e++;
 
@@ -670,6 +856,10 @@ else if(a==4)wscrl(out,1);
 }
 
 wprintw(out,"press any key to continue\n");
+
+rgamewindows();
+
+
 wgetch(in);
 
 return;
@@ -750,8 +940,10 @@ int printstats(){
 wprintw(stats,"Health: %d / %d \n ",player.C_HP,player.HP);
 wprintw(stats,"Position: %d,%d \n ",player.X,player.Y);
 wprintw(stats,"Ammo: %d/%d \n",player.C_ammo,player.C_ammocap);
-wprintw(stats,"enemys radar %d",current_map.p_enemys);
-wprintw(stats, "total blocks %d",current_map.blocks);
+wprintw(stats,"enemys radar %d \n",current_map.enemy_count);
+wprintw(stats, "total blocks %d \n",current_map.blocks);
+wprintw(stats,"npc position %d %d \n",npc[1].x,npc[1].y);
+wprintw(stats,"%s",npc[1].mapl);
 }
 
 
@@ -772,7 +964,8 @@ printstats();
 wprintw(out,"type 'help' for a list of commands");
 drawmap();
 rgamewindows();
-command();
+
+basic_input();
 
 cgamewindows();
 
@@ -844,6 +1037,46 @@ default:
 encounter();
 
 }
+
+
+
+basic_input(){
+	
+	char choice = wgetch(in);
+	
+	switch(choice){
+		
+		case '6':
+			shift(1);
+			break;
+		case '4':
+			shift(2);
+			break;
+		case '2':
+			shift(3);
+			break;
+		case '8':
+			shift(4);
+			break;
+		case 'c':
+			command();
+			break;
+				
+		default:
+			break;
+			
+		
+		
+		
+		
+		}
+	
+	
+	
+	
+	
+	
+	}
 
 
 
@@ -949,7 +1182,94 @@ int picker(){
 	
 	
 	
+//function to get dimensions for combat map
 
+int get_combat_map_dimensions(char axis){
+	if (axis = 'y'){
+		if ((parent_y/2-5)%2==0){
+		
+			return (parent_y/2-5)-1;
+		}
+			else
+				return(parent_y/2-5);
+		
+		
+		
+			
+			}
+		else if (axis = 'x'){
+			if((parent_x-2)%2==0){
+				
+				return(parent_x-2-1);
+			}
+			
+			else return (parent_x-2);
+			
+			}
+	
+	
+	
+	}
+/*	
+print_combat_map (int window_x, int window_y){
+	
+int cpx; 
+int cpy;
+int i;
+int q;
+int c;
+int emptys;
+
+int counter;
+int found;
+
+cpy = player.Y+(window_y-1)/2;
+
+for(q=0; q<=(window_y-1);q++){
+
+	for(emptys = 0; emptys <= ((parent_x/2-9)/2);emptys++) wprintw(out," ");
+ cpx = player.X-(window_x-1)/2;
+	for(i = 0;i<=(window_x-1);i++){
+		for(c=0;c<=100;c++){
+			if ((object[c].X==cpx)&&(object[c].Y==cpy)){
+				
+				
+				
+				for (counter = 0;counter<10;counter++){
+							found = 0;
+					if (cpx == actor[counter].x && cpy ==actor[counter].y ){
+						//where you left off
+						
+						
+						
+						
+							wprintw(out,actor.symbol);
+							found = 1;
+							break;
+								}
+					
+					
+					}
+					
+			if(!found) wprintw(out,"X");
+			break;
+				}
+			}
+		if (c==101) wprintw(out," ");
+		cpx++;
+			}
+		
+wprintw(out,"\n");
+
+
+cpy--;
+
+}
+	
+	
+	
+	}
+	*/
 
 //combat function
 
@@ -1050,12 +1370,33 @@ wprintw(out,"HP: %d \n", player.C_HP );
 
 
 
+} 
+
+
+
+
+/* //prototype combat:
+int tmpx;
+int tmpy;
+ tmpx = player.X;
+ tmpy = player.Y;
+ 
+ player.X = 0;
+ player.Y = 0;
+ 
+while (player.C_HP > 0){
+print_combat_map (get_combat_map_dimensions('x'),get_combat_map_dimensions('y'));	
+	
+	
 }
+*/
 
 }
-
 //death function
-death(){printw("you died");}
+death(){
+	printw(out,"you died");
+	endwin();
+	}
 
 
 //level up function

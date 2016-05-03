@@ -26,6 +26,8 @@ if (strcmp(str1,"go") == 0){
 	wprintw(out,"command not understood\n");
 	}
 	
+	
+	
 if (strcmp(str1,"list")==0){
 
 	if(strcmp(str2,"stats")==0) liststats();
@@ -34,14 +36,26 @@ if (strcmp(str1,"list")==0){
 	else
 	wprintw(out,"command not understood");
 	}
+	
+	
+	
 if(strcmp(str1,"loadmap")==0){
 landscape(str2);
 }
+
+
+
+
 else
+
 if(strcmp(str1,"save")==0)save();
+
 else 
+
 if (strcmp(str1,"load")==0)load();
+
 else 
+
 if(strcmp(str1,"scroll")==0){
 
 	if(strcmp(str2,"up")==0){
@@ -55,5 +69,33 @@ if(strcmp(str1,"scroll")==0){
 
 
 }
+
+else 
+
+if(strcmp(str1,"quit")==0){
+	endwin();
+	exit(0);
+	
+	
+	}
+	
+	else
+
+
+if(strcmp(str1,"rnpc")==0){
+	
+	loadnpc();
+
+}
+
+if (strcmp(str1,"console")==0){
+	
+	wrefresh(DEV);
+	wgetch(in);
+	rgamewindows();
+	
+	
+	
+	}
 
 }
